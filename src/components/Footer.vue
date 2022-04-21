@@ -1,0 +1,20 @@
+<script setup lang="ts">
+import { useRoute } from 'vue-router';
+import DarkSwitch from '@/components/DarkSwitch.vue';
+const route = useRoute()
+</script>
+
+
+
+<template>
+    <div class="flex h-24 p-3 py-8 xl:px-0 px-3 flex-1 relative w-full">
+        <div class="flex flex-1 w-full justify-start z-10">
+            <DarkSwitch />
+        </div>
+        <div class="absolute p-1 left-0 right-0 text-center select-none">
+            <h1 class="font-medium dark:text-oswapGreen">{{ route.name }}</h1>
+        </div>
+    </div>
+</template>
+
+

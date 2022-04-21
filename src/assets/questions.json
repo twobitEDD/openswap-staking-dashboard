@@ -1,0 +1,42 @@
+[
+    {
+        "question": "Where can i get ONEs?",
+        "answer": "You can get them on the big exchanges like Binance, Kucoin, Crypto.com, etc. Then withdraw them to your previously setup Metamask wallet and use them."
+    },
+    {
+        "question": "How do i stake?",
+        "answer": "YouTube guide coming soon."
+    },
+    {
+        "question": "How long is an epoch?",
+        "answer": "It depends on the blocktime. But usually that's around 18 hours (based on 2s blocktime)."
+    },
+    {
+        "question": "Is unstake instant?",
+        "answer": "No, it takes 7 full epochs (it doesn't count the one you are unstaking from) to receive your funds in your wallet."
+    },
+    {
+        "question": "Can i stake to a different validator without unstaking?",
+        "answer": "Yes, after 1 epoch you can delegate to a different validator."
+    },
+    {
+        "question": "What wallet should i use for staking?",
+        "answer": "Right now we recommend Metamask, you can use hardware wallets connected to Metamask if needed."
+    },
+    {
+        "question": "How much do i have to stake to generate rewards?",
+        "answer": "You need to delegate at least 100 ONEs to the validator you wanna receive rewards from, otherwise no rewards will be received."
+    },
+    {
+        "question": "How do i get my rewards?",
+        "answer": "You need to have at least 1 ONE to claim your rewards. If you do then you can do it through the Claim button in your profile, after you accept the transactions the rewards should appear in your wallet instantly."
+    },
+    {
+        "question": "How are validator's fees calculated?",
+        "answer": "Minimum fees are set at 5% as a rule (new validators can have less than 5% for 100 epochs as a way of advertisement then it will be set back to 5%), after that validators can choose how much they want to charge on fees. A couple of validators charge way beyond 5% because they transform the rewards or have some different way of rewarding their delegators."
+    },
+    {
+        "question": "Why rewards APR are so much higher than the rest?",
+        "answer": "Validators that go from unelected to elected have a boost in APR to make up for the epochs they were not elected, after that if they keep being elected their APR goes to a more normal level around 10%."
+    }
+]
