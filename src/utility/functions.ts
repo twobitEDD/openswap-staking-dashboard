@@ -3,7 +3,8 @@ import Toaster from '@/components/Toaster.vue'
 import numeral from "numeral";
 import { ToasterOptions } from "./toaster.interface";
 import { useToast } from "vue-toastification";
-
+import { bech32 } from 'bech32'
+import { Buffer } from 'buffer'
 export function returnPercentage(value: any) {
     return numeral(value).format('0.00%')
 }
@@ -75,4 +76,9 @@ export function toastMe(type: keyof ToasterOptions, props: any) {
         default:
             useToast()(content, optToast(type))
     }
+}
+
+export function fromBech32(address: string) {
+    const decoded = bech32.decode(address)
+    return `0x${Buffer.from(bech32.fromWords(decoded.words)).toString('hex')}`
 }

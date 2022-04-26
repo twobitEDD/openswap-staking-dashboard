@@ -1,11 +1,10 @@
 import { Delegation } from '@/utility/delations.interface';
-import { toastMe } from '@/utility/functions';
+import { fromBech32, toastMe } from '@/utility/functions';
 import harmony from '@/utility/harmony';
 import StakingPrecompiles from '@/assets/StakingPrecompiles.json'
 import { ethers, utils } from 'ethers';
 import { defineStore } from 'pinia'
 import { useGlobalStore } from './global';
-import { fromBech32 } from '@harmony-js/crypto'
 interface walletStore {
     isSigned: boolean;
     provider: any;
@@ -31,7 +30,19 @@ export const useWalletStore = defineStore('wallet', {
         },
         getPendingUndelegated(): string {
             return utils.formatUnits(this.delegations.reduce((previousValue, currentValue) => {
-                const amount = currentValue.Undelegations.reduce((prev, curr) => curr.Amount, 0)
+                const amount = currentValue.Undelegations.reduce((prev, curr) => prev + curr.Amount, 0)
+                return amount + previousValue
+            }, 0).toString(), 18)
+        },
+        getReDelegated(): string {
+            const globalStore = useGlobalStore()
+            return utils.formatUnits(this.delegations.reduce((previousValue, currentValue) => {
+                const amount = currentValue.Undelegations.reduce((prev, curr) => {
+                    if ((7 - (globalStore.epoch - curr.Epoch)) < 7) {
+                        return prev + curr.Amount
+                    }
+                    return prev
+                }, 0)
                 return amount + previousValue
             }, 0).toString(), 18)
         },
@@ -43,7 +54,13 @@ export const useWalletStore = defineStore('wallet', {
                     return 1
                 }
             })
-        }
+        },
+        getValidatorFromStaking: (state) => {
+            return (validatorAddress: string) => state.delegations.find((delegation) => delegation.validator_address === validatorAddress)
+        },
+        getValidatorsFromStaking(): any[] {
+            return this.delegations.filter((delegation) => delegation.amount > 0).map((element) => element.validator_info)
+        },
     },
     actions: {
         async loadDelegations() {
@@ -143,6 +160,55 @@ export const useWalletStore = defineStore('wallet', {
                 return false
             }
         },
+        async delegate(validatorAddress: string, amount: string) {
+            if (!this.isSigned) {
+                return false
+            }
+            const abi = StakingPrecompiles.abi;
+            const user = this.userAddress
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+            const globalStore = useGlobalStore()
+            const network = harmony.getHarmonyNetwork(globalStore.networkId)
+            if (!network) {
+                return false
+            }
+            const contract = new ethers.Contract(network.delegatorAddress, abi, signer);
+            const tx = await contract.Delegate(user, fromBech32(validatorAddress), ethers.utils.parseUnits(String(amount), 18)).catch((err: any) => {
+                let message;
+                if (!err.data?.message) {
+                    message = err.message
+                } else {
+                    message = err.data.message
+                }
+                toastMe('error', {
+                    title: 'Error :',
+                    msg: message,
+                    link: false
+                })
+                return
+            })
+            if (tx !== undefined) {
+                let explorer = 'https://explorer.harmony.one/#/tx/'
+                let transaction = tx.hash
+
+                toastMe('info', {
+                    title: 'Transaction Sent',
+                    msg: "Undelegation request sent to network. Waiting for confirmation",
+                    link: false,
+                    href: `${explorer}${transaction}`
+                })
+                await tx.wait(1)
+                toastMe('success', {
+                    title: 'Tx Successful',
+                    msg: "Explore : " + transaction,
+                    link: true,
+                    href: `${explorer}${transaction}`
+                })
+                return true
+            }
+            return false
+        },
         async undelegate(validatorAddress: string, amount: string) {
             if (!this.isSigned) {
                 return false
@@ -158,6 +224,55 @@ export const useWalletStore = defineStore('wallet', {
             }
             const contract = new ethers.Contract(network.delegatorAddress, abi, signer);
             const tx = await contract.Undelegate(user, fromBech32(validatorAddress), ethers.utils.parseUnits(String(amount), 18)).catch((err: any) => {
+                let message;
+                if (!err.data?.message) {
+                    message = err.message
+                } else {
+                    message = err.data.message
+                }
+                toastMe('error', {
+                    title: 'Error :',
+                    msg: message,
+                    link: false
+                })
+                return
+            })
+            if (tx !== undefined) {
+                let explorer = 'https://explorer.harmony.one/#/tx/'
+                let transaction = tx.hash
+
+                toastMe('info', {
+                    title: 'Transaction Sent',
+                    msg: "Undelegation request sent to network. Waiting for confirmation",
+                    link: false,
+                    href: `${explorer}${transaction}`
+                })
+                await tx.wait(1)
+                toastMe('success', {
+                    title: 'Tx Successful',
+                    msg: "Explore : " + transaction,
+                    link: true,
+                    href: `${explorer}${transaction}`
+                })
+                return true
+            }
+            return false
+        },
+        async claimRewards() {
+            if (!this.isSigned) {
+                return false
+            }
+            const abi = StakingPrecompiles.abi;
+            const user = this.userAddress
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+            const globalStore = useGlobalStore()
+            const network = harmony.getHarmonyNetwork(globalStore.networkId)
+            if (!network) {
+                return false
+            }
+            const contract = new ethers.Contract(network.delegatorAddress, abi, signer);
+            const tx = await contract.CollectRewards(user).catch((err: any) => {
                 let message;
                 if (!err.data?.message) {
                     message = err.message

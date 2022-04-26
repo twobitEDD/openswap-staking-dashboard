@@ -1,24 +1,45 @@
 <script setup lang="ts">import { useWalletStore } from '@/stores/wallet';
 import ValidatorLogo from '@/components/ValidatorLogo.vue'
+import MiniLoader from '@/components/MiniLoader.vue'
+import UnstakeModal from '@/components/UnstakeModal.vue'
 import { storeToRefs } from 'pinia';
 import numeral from 'numeral'
 import Address from '@/components/Address.vue'
 import Allocation from '@/components/Allocation.vue';
 import { useGlobalStore } from '@/stores/global';
+import { ref } from 'vue';
 const walletStore = useWalletStore()
 const { availableBalance, userAddress, getTotalStaked, getTotalRewards, getPendingUndelegated } = storeToRefs(useWalletStore())
 const { onePrice } = storeToRefs(useGlobalStore())
+let isOpen = ref(false)
+let isClaiming = ref(false)
 interface Profile {
     showDetailButton?: boolean;
 }
 const { showDetailButton } = withDefaults(defineProps<Profile>(), {
     showDetailButton: false
 })
+function unstakedSuccess() {
+    walletStore.loadDelegations()
+    isOpen.value = false
+}
+async function claim() {
+    isClaiming.value = true
+    try {
+        await walletStore.claimRewards()
+        walletStore.loadOneBalance()
+        walletStore.loadDelegations()
+    } catch (error) {
+    }
+    isClaiming.value = false
+}
 </script>
 
 <template>
     <div
         class="flex flex-1 p-4 justify-center items-center flex-col space-y-1 rounded-lg bg-gradient-to-r from-gray-300 to-slightGray dark:from-oswapDark-gray dark:to-slightDark shadow-lg relative">
+        <UnstakeModal @success-unstake="unstakedSuccess()" :disabled="false" :modalOpen="isOpen"
+            @close-modal="isOpen = false" />
         <div class="absolute top-4 right-4">
             <button @click="walletStore.loadDelegations(); walletStore.loadOneBalance()">
                 <i class="las la-sync text-oswapGreen-light text-lg"></i>
@@ -42,8 +63,8 @@ const { showDetailButton } = withDefaults(defineProps<Profile>(), {
                             <span class="text-xs dark:text-white text-black">Staked</span>
                             <span class="pt-1">{{ numeral(getTotalStaked).format('0[.]00') }}</span>
                             <span v-if="onePrice !== '0'">{{
-                                numeral(parseFloat(getTotalStaked) *
-                                    parseFloat(onePrice)).format('$0[.]00')
+                                    numeral(parseFloat(getTotalStaked) *
+                                        parseFloat(onePrice)).format('$0[.]00')
                             }}</span>
                         </div>
                     </div>
@@ -60,8 +81,8 @@ const { showDetailButton } = withDefaults(defineProps<Profile>(), {
                             <span class="text-xs dark:text-white text-black">Undelegated</span>
                             <span class="pt-1">{{ numeral(getPendingUndelegated).format('0[.]00') }}</span>
                             <span v-if="onePrice !== '0'">{{
-                                numeral(parseFloat(getPendingUndelegated) *
-                                    parseFloat(onePrice)).format('$0[.]00')
+                                    numeral(parseFloat(getPendingUndelegated) *
+                                        parseFloat(onePrice)).format('$0[.]00')
                             }}</span>
                         </div>
                     </div>
@@ -78,8 +99,8 @@ const { showDetailButton } = withDefaults(defineProps<Profile>(), {
                             <span class="text-xs dark:text-white text-black">Rewards</span>
                             <span class="pt-1">{{ numeral(getTotalRewards).format('0[.]00') }}</span>
                             <span v-if="onePrice !== '0'">{{
-                                numeral(parseFloat(getTotalRewards) *
-                                    parseFloat(onePrice)).format('$0[.]00')
+                                    numeral(parseFloat(getTotalRewards) *
+                                        parseFloat(onePrice)).format('$0[.]00')
                             }}</span>
                         </div>
                     </div>
@@ -95,8 +116,8 @@ const { showDetailButton } = withDefaults(defineProps<Profile>(), {
                             <span class="text-xs dark:text-white text-black">Available</span>
                             <span class="pt-1">{{ numeral(availableBalance).format('0[.]00') }}</span>
                             <span v-if="onePrice !== '0'">{{
-                                numeral(parseFloat(availableBalance) *
-                                    parseFloat(onePrice)).format('$0[.]00')
+                                    numeral(parseFloat(availableBalance) *
+                                        parseFloat(onePrice)).format('$0[.]00')
                             }}</span>
                         </div>
                     </div>
@@ -115,10 +136,14 @@ const { showDetailButton } = withDefaults(defineProps<Profile>(), {
                 </router-link>
             </div>
             <div class="flex flex-none p-2">
-                <button class="rounded-md bg-oswapBlue-light px-4 py-2">Unstake</button>
+                <button @click="isOpen = true" class="rounded-md bg-oswapBlue-light px-4 py-2">Unstake</button>
             </div>
             <div class="flex flex-none p-2">
-                <button class="rounded-md bg-oswapGreen-dark px-4 py-2">Claim Rewards</button>
+                <button @click="isClaiming ? '' : claim()" :class="isClaiming ? 'select-none cursor-not-allowed' : ''"
+                    class="rounded-md bg-oswapGreen-dark px-4 py-2">
+                    <span v-if="!isClaiming">Claim Rewards</span>
+                    <MiniLoader v-else />
+                </button>
             </div>
         </div>
     </div>

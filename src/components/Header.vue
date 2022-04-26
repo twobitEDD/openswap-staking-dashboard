@@ -11,6 +11,11 @@ const { effectiveStake, supply, totalStaked, slots, amountBlocks, onePrice } = s
 const { isSigned } = storeToRefs(useWalletStore())
 const routes = [
     {
+        icon: 'las la-user',
+        name: 'Portfolio',
+        url: '/portfolio'
+    },
+    {
         icon: 'las la-users-cog',
         name: 'Validators',
         url: '/validators'

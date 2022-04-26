@@ -201,7 +201,10 @@ function dark() {
             <span class="text-oswapBlue-light text-lg">Expected return in the last 30 epochs</span>
         </div>
         <Popper arrow placement="bottom" :show="chartHovered">
-            <div class="flex flex-1 w-full" id="refChart" ref="refChart"></div>
+            <div class="flex flex-1 w-full relative p-2" id="refChart" ref="refChart">
+                <a href="https://www.tradingview.com/" target="_blank" class="absolute right-1 bottom-0 text-ns">Powered
+                    by TradingView</a>
+            </div>
             <template #content>
                 <div>Epoch: {{ epochHovered }}</div>
                 <div>APR: {{ aprHovered }}</div>
