@@ -46,6 +46,7 @@ export interface Delegation {
     amount: number;
     delegator_address: string;
     reward: number;
+    percentage?: string;
     validator_address: string;
     validator_info: ValidatorInfo;
 }

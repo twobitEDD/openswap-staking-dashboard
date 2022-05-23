@@ -1,5 +1,5 @@
-import { Delegation } from '@/utility/delations.interface';
-import { fromBech32, toastMe } from '@/utility/functions';
+import { Delegation } from '@/utility/delegations.interface';
+import { fromBech32, returnProvider, toastMe } from '@/utility/functions';
 import harmony from '@/utility/harmony';
 import StakingPrecompiles from '@/assets/StakingPrecompiles.json'
 import { ethers, utils } from 'ethers';
@@ -101,8 +101,18 @@ export const useWalletStore = defineStore('wallet', {
             }
         },
         async setupWallet() {
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            await provider.send("eth_requestAccounts", []);
+            const globalStore = useGlobalStore()
+            const network = harmony.getHarmonyNetwork(globalStore.networkId)
+            if (!network) {
+                return false
+            }
+            const sourceProvider = await returnProvider(globalStore.walletMode);
+            const provider = new ethers.providers.Web3Provider(sourceProvider);
+            switch (globalStore.walletMode) {
+                case 'metamask':
+                    await provider.send("eth_requestAccounts", []);
+                    break;
+            }
             const signer = await provider.getSigner();
             const { chainId } = await provider.getNetwork()
             const chainAccepted = harmony.getHarmonyNetwork(chainId)
@@ -116,7 +126,6 @@ export const useWalletStore = defineStore('wallet', {
                 return false
             } else {
                 const accounts = await signer.getAddress();
-                const globalStore = useGlobalStore()
                 globalStore.autoConnect = true;
                 if (accounts !== this.userAddress || globalStore.networkId !== chainAccepted.chainId) {
                     toastMe('success', {
@@ -148,27 +157,33 @@ export const useWalletStore = defineStore('wallet', {
             return false
         },
         async connect() {
-            if (window.ethereum !== undefined) {
-                return await this.setupWallet()
+            const globalStore = useGlobalStore()
+            if (globalStore.walletMode === 'metamask') {
+                if (window.ethereum !== undefined) {
+                    return await this.setupWallet()
+                }
+                else if (window.ethereum == undefined) {
+                    toastMe('warning', {
+                        title: 'Wallet :',
+                        msg: "It seems you don't have Metamask installed! try switching Wallet Mode",
+                        link: false,
+                    })
+                    return false
+                }
             }
-            else if (window.ethereum == undefined) {
-                toastMe('warning', {
-                    title: 'Wallet :',
-                    msg: "It seems you don't have Metamask installed! try switching Wallet Mode",
-                    link: false,
-                })
-                return false
-            }
+            return await this.setupWallet()
         },
+
         async delegate(validatorAddress: string, amount: string) {
             if (!this.isSigned) {
                 return false
             }
             const abi = StakingPrecompiles.abi;
             const user = this.userAddress
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const signer = provider.getSigner();
             const globalStore = useGlobalStore()
+            const sourceProvider = await returnProvider(globalStore.walletMode);
+            const provider = new ethers.providers.Web3Provider(sourceProvider);
+            const signer = provider.getSigner();
             const network = harmony.getHarmonyNetwork(globalStore.networkId)
             if (!network) {
                 return false
@@ -215,9 +230,10 @@ export const useWalletStore = defineStore('wallet', {
             }
             const abi = StakingPrecompiles.abi;
             const user = this.userAddress
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const signer = provider.getSigner();
             const globalStore = useGlobalStore()
+            const sourceProvider = await returnProvider(globalStore.walletMode);
+            const provider = new ethers.providers.Web3Provider(sourceProvider);
+            const signer = provider.getSigner();
             const network = harmony.getHarmonyNetwork(globalStore.networkId)
             if (!network) {
                 return false
@@ -264,9 +280,10 @@ export const useWalletStore = defineStore('wallet', {
             }
             const abi = StakingPrecompiles.abi;
             const user = this.userAddress
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const signer = provider.getSigner();
             const globalStore = useGlobalStore()
+            const sourceProvider = await returnProvider(globalStore.walletMode);
+            const provider = new ethers.providers.Web3Provider(sourceProvider);
+            const signer = provider.getSigner();
             const network = harmony.getHarmonyNetwork(globalStore.networkId)
             if (!network) {
                 return false

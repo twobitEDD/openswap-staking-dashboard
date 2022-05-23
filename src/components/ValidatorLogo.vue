@@ -27,10 +27,6 @@ const getAvatar = computed(() => {
 
 <template>
     <div :class="logoClass" v-if="!hasLogo || loadedWithError" v-html="getAvatar" />
-    <img
-        v-else
-        :class="logoClass"
-        :src="getApiUrl + 'validators/' + address + '/avatar'"
-        @error="loadedWithError = true"
-    />
+    <img v-else class="w-12 h-12 rounded-full" :class="logoClass" :src="getApiUrl + 'validators/' + address + '/avatar'"
+        @error="loadedWithError = true" />
 </template>

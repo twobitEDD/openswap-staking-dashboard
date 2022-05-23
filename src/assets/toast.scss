@@ -1,3 +1,5 @@
+$la-font-path: "line-awesome/dist/line-awesome/fonts" !default;
+@import 'line-awesome/dist/line-awesome/scss/line-awesome.scss';
 $vt-namespace: 'Vue-Toastification' !default;
 $vt-toast-min-width: 150px !default;
 $vt-toast-max-width: 500px !default;

@@ -22,7 +22,7 @@ const routes = [
     },
     {
         icon: 'las la-question',
-        name: 'How does it works?',
+        name: 'How does it work?',
         url: '/how-it-works'
     }
 ]

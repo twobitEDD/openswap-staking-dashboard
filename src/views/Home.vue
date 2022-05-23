@@ -20,7 +20,7 @@ if (!globalStore.isFirst) {
             <div class="flex flex-none w-full justify-center lg:justify-end mt-8">
                 <router-link :to="'/how-it-works'"
                     class="flex items-center space-x-2 p-2 px-1 md:px-3 rounded-lg group focus:outline-none focus:ring-1 focus:ring-black focus:ring-opacity-20">
-                    <button class="p-3 text-lg rounded-lg bg-oswapBlue-light text-white">How it works?</button>
+                    <button class="p-3 text-lg rounded-lg bg-oswapBlue-light text-white">How does it work?</button>
                 </router-link>
                 <router-link :to="'/validators'" @click="globalStore.changeIsFirst()"
                     class="flex items-center space-x-2 p-2 px-1 md:px-3 rounded-lg group focus:outline-none focus:ring-1 focus:ring-black focus:ring-opacity-20">

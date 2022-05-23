@@ -65,7 +65,7 @@ const validatorsStore = useValidatorsStore()
                                             <Address :address="delegator['delegator-address']" class="lg:hidden flex" />
                                             <span class="hidden lg:flex">
                                                 {{
-                                                    delegator['delegator-address']
+                                                        delegator['delegator-address']
                                                 }}
                                             </span>
                                         </a>
@@ -75,7 +75,8 @@ const validatorsStore = useValidatorsStore()
                                 </td>
                                 <td
                                     class="lg:py-4 lg:px-6 md:py-4 md:px-6 py-2 px-1 text-xs md:text-sm lg:text-sm whitespace-nowrap ">
-                                    {{ delegator.amount }}</td>
+                                    {{ delegator.amount }} <span class="text-xs">({{ delegator?.percentage }})</span>
+                                </td>
 
                             </tr>
                             <tr

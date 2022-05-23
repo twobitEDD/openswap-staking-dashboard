@@ -6,6 +6,7 @@ import { Networks } from '@/utility/networks.interface';
 import { ETH_PRICE } from '@/apollo/queries';
 import { client } from '@/apollo/clients';
 import { cachePolicy } from '@/constants';
+import { useWalletStore } from './wallet';
 
 interface globalStore {
     theme: string;
@@ -21,6 +22,7 @@ interface globalStore {
     networkId: number;
     onePrice: string;
     autoConnect: boolean;
+    walletMode: 'metamask' | 'walletconnect';
 }
 
 export const useGlobalStore = defineStore('global', {
@@ -37,7 +39,8 @@ export const useGlobalStore = defineStore('global', {
         amountBlocks: 0,
         networkId: 1666600000,
         onePrice: '0',
-        autoConnect: false
+        autoConnect: false,
+        walletMode: 'metamask'
     } as globalStore),
     persist: true,
     getters: {
@@ -59,6 +62,9 @@ export const useGlobalStore = defineStore('global', {
         },
         getApiUrl(): string | undefined {
             return harmony.getHarmonyNetwork(this.networkId)?.apiURL
+        },
+        getWalletMode(): string {
+            return this.walletMode
         }
     },
     actions: {
@@ -70,6 +76,15 @@ export const useGlobalStore = defineStore('global', {
         },
         scrollTop() {
             // This triggers a listener to this type of action
+        },
+        changeWalletMode() {
+            if (this.walletMode == 'metamask') {
+                this.walletMode = 'walletconnect'
+            } else if (this.walletMode == 'walletconnect') {
+                this.walletMode = 'metamask'
+            };
+            const walletStore = useWalletStore()
+            walletStore.disconnect()
         },
         changeTheme() {
             if (this.theme == 'dark') {

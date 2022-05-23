@@ -3,7 +3,7 @@ import { useGlobalStore } from '@/stores/global';
 import ValidatorLogo from '@/components/ValidatorLogo.vue';
 import UnstakeModal from '@/components/UnstakeModal.vue';
 import StakeModal from '@/components/StakeModal.vue';
-import { Delegation } from '@/utility/delations.interface';
+import { Delegation } from '@/utility/delegations.interface';
 import Popper from "vue3-popper";
 import { utils } from 'ethers';
 import numeral from 'numeral';

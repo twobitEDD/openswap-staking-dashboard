@@ -4,6 +4,8 @@ import numeral from "numeral";
 import { ToasterOptions } from "./toaster.interface";
 import { useToast } from "vue-toastification";
 import { bech32 } from 'bech32'
+import { availableNetworks } from "@/utility/harmony";
+import WalletConnectProvider from "@walletconnect/web3-provider";
 import { Buffer } from 'buffer'
 export function returnPercentage(value: any) {
     return numeral(value).format('0.00%')
@@ -28,7 +30,25 @@ export function sortByParams(
         return a > b ? -sortFactor : sortFactor
     })
 }
+export async function returnProvider(walletMode: string) {
+    let sourceProvider: any;
+    switch (walletMode) {
+        case 'walletconnect':
+            const networks = availableNetworks
+            const sources: any = {}
+            networks.forEach((network) => { sources[network.chainId] = network.rpcURL })
+            sourceProvider = new WalletConnectProvider({
+                rpc: sources
+            })
+            await sourceProvider.enable();
+            break;
 
+        default:
+            sourceProvider = window.ethereum
+            break;
+    }
+    return sourceProvider
+}
 export function shuffle(array: any[]) {
     let currentIndex = array.length,
         temporaryValue,

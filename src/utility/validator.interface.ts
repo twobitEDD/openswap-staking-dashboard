@@ -2,6 +2,7 @@ export interface Delegation {
     'delegator-address': string;
     amount: string;
     reward: number;
+    percentage?: string;
     undelegations: any[];
 }
 

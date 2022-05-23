@@ -6,7 +6,7 @@ import { Networks } from '@/utility/networks.interface';
 
 
 
-const networks: Networks[] = [
+export const availableNetworks: Networks[] = [
     {
         chainId: 1666600000,
         apiURL: BASE_URL + 'mainnet/',
@@ -36,7 +36,7 @@ export default {
         "id": 1
       }`},
     getHarmonyNetwork(chainId: number) {
-        return networks.find((network) => network.chainId === chainId)
+        return availableNetworks.find((network) => network.chainId === chainId)
     },
     getNetworkInfo(chainId: number) {
         const networkAPI = this.getHarmonyNetwork(chainId)?.apiURL

@@ -164,6 +164,7 @@ export const useValidatorsStore = defineStore('validators', {
                 const validatorsInfo = await Harmony.getValidator(globalStore.networkId, address)
                 if (validatorsInfo.status === 200) {
                     const validatorsData: ValidatorFull = validatorsInfo.data
+                    const totalStake = parseFloat(validatorsData.total_stake) / (10 ** 18)
                     const customDelegations = validatorsData.delegations
                         .sort((av, bV) => {
                             if (av.amount > bV.amount) {
@@ -172,7 +173,14 @@ export const useValidatorsStore = defineStore('validators', {
                                 return 1
                             }
                         })
-                        .map((element) => ({ ...element, amount: numeral(parseInt((parseFloat(element.amount) / (10 ** 18)).toString())).format('0,0,0') }))
+                        .map((element) => {
+                            const amount = (parseFloat(element.amount) / (10 ** 18))
+                            return {
+                                ...element,
+                                percentage: numeral(totalStake && amount > 1 ? ((100 * (parseFloat(element.amount) / (10 ** 18))) / totalStake) / 100 : '0').format('0.00%'),
+                                amount: numeral(parseInt(amount.toString())).format('0,0,0')
+                            }
+                        })
                     this.validator = {
                         ...validatorsData,
                         lifetime_reward_accumulated: numeral(parseInt((parseFloat(validatorsData.lifetime_reward_accumulated) / (10 ** 18)).toString())).format('0,0,0'),
