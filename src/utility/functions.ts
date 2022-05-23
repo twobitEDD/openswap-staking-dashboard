@@ -6,7 +6,7 @@ import { useToast } from "vue-toastification";
 import { bech32 } from 'bech32'
 import { availableNetworks } from "@/utility/harmony";
 import WalletConnectProvider from "@walletconnect/web3-provider";
-import { Buffer } from 'buffer'
+import { Buffer } from "buffer/index";
 export function returnPercentage(value: any) {
     return numeral(value).format('0.00%')
 }

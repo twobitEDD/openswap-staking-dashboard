@@ -32,7 +32,12 @@ function close() {
     emit('closeModal')
 }
 function setMax() {
-    input.value = (parseFloat(amountAvailable.value) - 0.5).toString()
+    const totalAmount = parseFloat(amountAvailable.value)
+    if (totalAmount > 0.5) {
+        input.value = (totalAmount - 0.5).toString()
+    } else {
+        input.value = (totalAmount).toString()
+    }
 }
 async function stake() {
     if (validator) {

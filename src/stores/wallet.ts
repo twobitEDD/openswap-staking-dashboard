@@ -209,7 +209,7 @@ export const useWalletStore = defineStore('wallet', {
 
                 toastMe('info', {
                     title: 'Transaction Sent',
-                    msg: "Undelegation request sent to network. Waiting for confirmation",
+                    msg: "Delegation request sent to network. Waiting for confirmation",
                     link: false,
                     href: `${explorer}${transaction}`
                 })
@@ -309,7 +309,7 @@ export const useWalletStore = defineStore('wallet', {
 
                 toastMe('info', {
                     title: 'Transaction Sent',
-                    msg: "Undelegation request sent to network. Waiting for confirmation",
+                    msg: "Claim request sent to network. Waiting for confirmation",
                     link: false,
                     href: `${explorer}${transaction}`
                 })
