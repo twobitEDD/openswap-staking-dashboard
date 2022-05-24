@@ -14,7 +14,7 @@ export const availableNetworks: Networks[] = [
         explorer: 'https://explorer.harmony.one/',
         name: 'Harmony Mainnet',
         hasPrice: true,
-        delegatorAddress: '0xe6dd98403ec2661a4bb1fb73b64e7df9bd9b1045'
+        delegatorAddress: '0x00000000000000000000000000000000000000fc'
     },
     {
         chainId: 1666700000,
