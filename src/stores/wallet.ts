@@ -23,20 +23,20 @@ export const useWalletStore = defineStore('wallet', {
     } as walletStore),
     getters: {
         getTotalStaked(): string {
-            return utils.formatUnits(this.delegations.reduce((previousValue, currentValue) => { return currentValue.amount + previousValue }, 0).toString(), 18)
+            return (this.delegations.reduce((previousValue, currentValue) => { return currentValue.amount + previousValue }, 0) / (10 ** 18)).toString()
         },
         getTotalRewards(): string {
-            return utils.formatUnits(this.delegations.reduce((previousValue, currentValue) => { return currentValue.reward + previousValue }, 0).toString(), 18)
+            return (this.delegations.reduce((previousValue, currentValue) => { return currentValue.reward + previousValue }, 0) / (10 ** 18)).toString()
         },
         getPendingUndelegated(): string {
-            return utils.formatUnits(this.delegations.reduce((previousValue, currentValue) => {
+            return (this.delegations.reduce((previousValue, currentValue) => {
                 const amount = currentValue.Undelegations.reduce((prev, curr) => prev + curr.Amount, 0)
                 return amount + previousValue
-            }, 0).toString(), 18)
+            }, 0) / (10 ** 18)).toString()
         },
         getReDelegated(): string {
             const globalStore = useGlobalStore()
-            return utils.formatUnits(this.delegations.reduce((previousValue, currentValue) => {
+            return (this.delegations.reduce((previousValue, currentValue) => {
                 const amount = currentValue.Undelegations.reduce((prev, curr) => {
                     if ((7 - (globalStore.epoch - curr.Epoch)) < 7) {
                         return prev + curr.Amount
@@ -44,7 +44,7 @@ export const useWalletStore = defineStore('wallet', {
                     return prev
                 }, 0)
                 return amount + previousValue
-            }, 0).toString(), 18)
+            }, 0) / (10 ** 18)).toString()
         },
         getUsedDelegations(): Delegation[] {
             return this.delegations.filter((delegation: Delegation) => delegation.amount > 0 || delegation.Undelegations.length > 0 || delegation.reward > 0).sort((aV, bV) => {

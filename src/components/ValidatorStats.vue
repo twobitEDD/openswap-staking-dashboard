@@ -23,13 +23,18 @@ const props = withDefaults(defineProps<Props>(), {});
 function getUndelegationEpoch(undelEpoch: number) {
     return undelEpoch - epoch.value + 7
 }
-
+const delegatedAmount = computed(() => {
+    return props.Args.delegated.amount / (10 ** 18)
+})
+const rewardsAmount = computed(() => {
+    return props.Args.delegated.reward / (10 ** 18)
+})
 const getAmountsUndelegated = computed(() => {
     const amount = props.Args.delegated.Undelegations.reduce((previousValue, current) => current.Amount + previousValue, 0)
-    return numeral(utils.formatUnits(amount.toString(), 18)).format('0[.]0000')
+    return numeral((amount / (10 ** 18)).toString()).format('0[.]0000')
 })
 const projected = computed(() => {
-    return (props.Args.delegated.validator_info.apr * 100 * parseFloat(utils.formatUnits(props.Args.delegated.amount.toString(), 18))) / 365
+    return props.Args.delegated.validator_info.apr * 100 * delegatedAmount.value / 365
 })
 function unstakedSuccess() {
     const walletStore = useWalletStore()
@@ -77,11 +82,11 @@ function stakedSuccess() {
                 <div class="flex flex-none flex-col">
                     <span class="text-oswapBlue-dark">
                         Staked: {{
-                                numeral(utils.formatUnits(props.Args.delegated.amount.toString(), 18)).format('0[.]0000')
+                                numeral(delegatedAmount).format('0[.]0000')
                         }}
                         <span v-if="onePrice !== '0'">
                             / {{
-                                    numeral(parseFloat(utils.formatUnits(props.Args.delegated.amount.toString(), 18)) *
+                                    numeral((delegatedAmount) *
                                         parseFloat(onePrice)).format('$0[.]0000')
                             }}
                         </span>
@@ -109,8 +114,7 @@ function stakedSuccess() {
                                     <div class="flex flex-none space-x-2"
                                         v-for="undel of props.Args.delegated.Undelegations">
                                         <span>
-                                            - {{ numeral(utils.formatUnits(undel.Amount.toString(),
-                                                    18)).format('0[.]0000')
+                                            - {{ numeral(delegatedAmount).format('0[.]0000')
                                             }}
                                             ONEs
                                         </span>
@@ -126,11 +130,11 @@ function stakedSuccess() {
                     </div>
                     <span class="text-oswapGreen-dark">
                         Rewards: {{
-                                numeral(utils.formatUnits(props.Args.delegated.reward.toString(), 18)).format('0[.]0000')
+                                numeral(rewardsAmount).format('0[.]0000')
                         }}
                         <span v-if="onePrice !== '0'">
                             / {{
-                                    numeral(parseFloat(utils.formatUnits(props.Args.delegated.reward.toString(), 18)) *
+                                    numeral((rewardsAmount) *
                                         parseFloat(onePrice)).format('$0[.]0000')
                             }}
                         </span>

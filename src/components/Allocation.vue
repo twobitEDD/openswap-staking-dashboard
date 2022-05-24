@@ -5,7 +5,6 @@ import { useWalletStore } from '@/stores/wallet';
 import numeral from 'numeral'
 import { useGlobalStore } from '@/stores/global';
 import { computed, Ref, ref } from '@vue/reactivity';
-import { utils } from 'ethers/lib/ethers';
 const { getUsedDelegations, getTotalStaked } = storeToRefs(useWalletStore())
 const { theme } = storeToRefs(useGlobalStore())
 
@@ -52,7 +51,7 @@ let used: Ref<string[]> = ref([])
 const sections = computed(() => {
     used.value = []
     const mapped = getUsedDelegations.value.map((delegation) => {
-        return { label: delegation.validator_info.name, address: delegation.validator_address, value: (parseFloat(utils.formatUnits(delegation.amount.toString(), 18)) / parseFloat(getTotalStaked.value)) * 100, color: randomColorIndex() }
+        return { label: delegation.validator_info.name, address: delegation.validator_address, value: ((delegation.amount / (10 ** 18)) / parseFloat(getTotalStaked.value)) * 100, color: randomColorIndex() }
     })
     return mapped
 })

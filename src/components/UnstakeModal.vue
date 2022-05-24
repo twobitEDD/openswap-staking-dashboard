@@ -44,8 +44,8 @@ function setMax(max: string) {
 async function unstake() {
     if (validatorSelected.value) {
         const floatValue = parseFloat(input.value)
-        if (floatValue > parseFloat(utils.formatUnits(validatorSelected.value.amount.toString(), 18)) || floatValue < 0.000001) {
-            error.value = [`Amount must be between 0.000001 and ${utils.formatUnits(validatorSelected.value.amount.toString(), 18)}`]
+        if (floatValue > (validatorSelected.value.amount / (10 ** 18)) || floatValue < 0.000001) {
+            error.value = [`Amount must be between 0.000001 and ${(validatorSelected.value.amount / (10 ** 18))}`]
         } else {
             error.value = []
             unstaking.value = true
@@ -95,7 +95,7 @@ async function unstake() {
                             <div class="mt-4 flex flex-col space-y-2">
                                 <span v-if="validatorSelected">
                                     Currently Staked: {{
-                                            numeral(utils.formatUnits(validatorSelected.amount.toString(), 18)).format('0[.]00')
+                                            numeral((validatorSelected.amount / (10 ** 18))).format('0[.]00')
                                     }} ONEs
                                 </span>
                                 <ValidatorSelector @newSelected="refValidatorAddress = $event"
@@ -108,7 +108,7 @@ async function unstake() {
                                     </div>
                                     <div class="flex flex-none ml-4">
                                         <button class="flex flex-none justify-center items-center"
-                                            @click="setMax(utils.formatUnits(validatorSelected?.amount.toString(), 18))">Set
+                                            @click="setMax(((validatorSelected?.amount || 0) / (10 ** 18)).toString())">Set
                                             Max</button>
                                     </div>
                                 </div>
