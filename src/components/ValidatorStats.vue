@@ -69,7 +69,9 @@ function stakedSuccess() {
             </span>
         </div>
         <div class="flex flex-1 flex-col">
-            <span class="overflow-hidden">{{ props.Args.delegated.validator_info.name }}</span>
+            <router-link :to="`/validators/${props.Args.delegated.validator_info.address}`">{{
+                    props.Args.delegated.validator_info.name
+            }}</router-link>
             <span class="text-xs"
                 :class="props.Args.delegated.validator_info.active ? ' text-oswapGreen-dark' : 'text-red-600'">
                 {{

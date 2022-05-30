@@ -147,10 +147,6 @@ function createCh() {
         height: 350,
         rightPriceScale: {
             borderVisible: false,
-            scaleMargins: {
-                top: 0.5,
-                bottom: 0,
-            },
         },
         timeScale: {
             barSpacing: 20,

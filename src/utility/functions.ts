@@ -102,3 +102,7 @@ export function fromBech32(address: string) {
     const decoded = bech32.decode(address)
     return `0x${Buffer.from(bech32.fromWords(decoded.words)).toString('hex')}`
 }
+
+export function escapeRegExp(string: string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
+}

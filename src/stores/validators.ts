@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import Harmony from '@/utility/harmony'
 import { useGlobalStore } from './global';
 import { utils } from 'ethers'
-import { shuffle, sortByParams } from '@/utility/functions';
+import { escapeRegExp, shuffle, sortByParams } from '@/utility/functions';
 import { validatorsWhitelist } from '@/constants';
 import { Delegation, ValidatorFull } from '@/utility/validator.interface';
 import numeral from 'numeral';
@@ -28,6 +28,7 @@ interface validatorsStore {
     loading: boolean;
     showElected: boolean;
     showNonElected: boolean;
+    filterValidators: string;
     validatorPageIndex: number;
     stakeHistory: StakeHistory[];
     returnHistory: ReturnHistory[];
@@ -45,6 +46,7 @@ export const useValidatorsStore = defineStore('validators', {
         loading: true,
         showElected: true,
         showNonElected: false,
+        filterValidators: '',
         stakeHistory: [],
         returnHistory: [],
     } as validatorsStore),
@@ -57,21 +59,23 @@ export const useValidatorsStore = defineStore('validators', {
         },
         getFiltered(): Validators[] {
             return this.validators.filter((validator) => {
+                const filterByString = (validator.address.match(new RegExp(escapeRegExp(this.filterValidators), 'i')) ||
+                    validator.name.match(new RegExp(escapeRegExp(this.filterValidators), 'i')) ||
+                    !this.filterValidators)
                 if (this.showElected && this.showNonElected) {
-                    return validator
+                    return validator && filterByString
                 } else {
                     if (this.showElected || this.showNonElected) {
                         if (!this.showElected) {
-                            return validator.active === false
+                            return validator.active === false && filterByString
                         }
                         if (!this.showNonElected) {
-                            return validator.active === true
+                            return validator.active === true && filterByString
                         }
                     }
 
                 }
-                return validator
-
+                return validator && filterByString
             })
         },
         getAmount(): number {
@@ -96,6 +100,9 @@ export const useValidatorsStore = defineStore('validators', {
         },
         setShowNonElected(value: boolean) {
             this.showNonElected = value
+        },
+        setfilterValidators(value: string) {
+            this.filterValidators = value
         },
         setLimit(limit: number) {
             this.limit = limit

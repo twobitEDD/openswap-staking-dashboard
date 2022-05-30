@@ -2,7 +2,7 @@ import { Delegation } from '@/utility/delegations.interface';
 import { fromBech32, returnProvider, toastMe } from '@/utility/functions';
 import harmony from '@/utility/harmony';
 import StakingPrecompiles from '@/assets/StakingPrecompiles.json'
-import { ethers, utils } from 'ethers';
+import { ethers } from 'ethers';
 import { defineStore } from 'pinia'
 import { useGlobalStore } from './global';
 interface walletStore {
