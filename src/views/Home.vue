@@ -1,12 +1,5 @@
 <script setup lang="ts">
 import OneLogo from '@/assets/one_oswap.png'
-import { useGlobalStore } from '@/stores/global';
-import { useRouter } from 'vue-router';
-const globalStore = useGlobalStore()
-if (!globalStore.isFirst) {
-    const router = useRouter()
-    router.push(`/validators/`)
-}
 </script>
 
 <template>
@@ -22,7 +15,7 @@ if (!globalStore.isFirst) {
                     class="flex items-center space-x-2 p-2 px-1 md:px-3 rounded-lg group focus:outline-none focus:ring-1 focus:ring-black focus:ring-opacity-20">
                     <button class="p-3 text-lg rounded-lg bg-oswapBlue-light text-white">How does it work?</button>
                 </router-link>
-                <router-link :to="'/validators'" @click="globalStore.changeIsFirst()"
+                <router-link :to="'/validators'"
                     class="flex items-center space-x-2 p-2 px-1 md:px-3 rounded-lg group focus:outline-none focus:ring-1 focus:ring-black focus:ring-opacity-20">
                     <button class="p-3 text-lg rounded-lg bg-oswapGreen-dark text-white">Stake Now!</button>
                 </router-link>

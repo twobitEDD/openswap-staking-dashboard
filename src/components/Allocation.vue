@@ -9,49 +9,21 @@ const { getUsedDelegations, getTotalStaked } = storeToRefs(useWalletStore())
 const { theme } = storeToRefs(useGlobalStore())
 
 const colors = [
-    '#DDFDF5',
-    '#D1FCF1',
-    '#BBFBEA',
-    '#AFFAE7',
-    '#A4FAE3',
-    '#98F9E0',
-    '#8DF9DD',
-    '#26F3BD',
-    '#49F5C8',
-    '#54F5CB',
-    '#76F7D6',
-    '#0F8566',
-    '#129D79',
-    '#16C295',
-    '#18DAA7',
-    '#04241C',
-    '#084938',
-    '#0B614A',
-    '#0E795D',
-    '#C3E7EE',
-    '#93D3E0',
-    '#70C4D6',
-    '#58BACF',
-    '#34ACC5',
-    '#1CA2BE',
-    '#0E859F',
-    '#0A667A',
-    '#095667',
-    '#063F4B',
-    '#04272F',
-    '#021013',
-    '#36BFC4',
-    '#42C3C8',
-    '#0C7579',
-    '#08484A',
-    '#D0F0F1',
+    '#00ADE8', '#32B5CD', '#D8BE72', '#E36E7A', '#AC9393', '#6CD1B5', '#35C3CC',
+    '#79D9EC', '#94F4D9', '#68F7BA', '#68F9BB', '#75ECBA', '#68F9BB', '#43C3EE', '#D1F1FA', '#4E4F79', '#F8AD63'
 ]
 let used: Ref<string[]> = ref([])
 
 const sections = computed(() => {
     used.value = []
     const mapped = getUsedDelegations.value.map((delegation) => {
-        return { label: delegation.validator_info.name, address: delegation.validator_address, value: ((delegation.amount / (10 ** 18)) / parseFloat(getTotalStaked.value)) * 100, color: randomColorIndex() }
+        let stakeValue;
+        if (delegation.amount === 0) {
+            stakeValue = 0
+        } else {
+            stakeValue = ((delegation.amount / (10 ** 18)) / parseFloat(getTotalStaked.value)) * 100
+        }
+        return { label: delegation.validator_info.name, address: delegation.validator_address, value: stakeValue, color: randomColorIndex() }
     })
     return mapped
 })

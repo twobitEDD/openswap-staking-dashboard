@@ -7,6 +7,7 @@ import Donut from 'vue-css-donut-chart';
 import 'vue-css-donut-chart/dist/vcdonut.css';
 import '@/assets/tailwind.postcss'
 import Toast, { PluginOptions } from "vue-toastification";
+import 'animate.css';
 // Import the CSS or use your own!
 import "@/assets/toast.scss";
 const options: PluginOptions = {

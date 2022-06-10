@@ -5,10 +5,12 @@ import StateTag from '@/components/StateTag.vue'
 import ValidatorLogo from '@/components/ValidatorLogo.vue'
 import ValidatorGuide from '@/components/ValidatorGuide.vue'
 import ValidatorsSearch from '@/components/ValidatorsSearch.vue'
+import StakeModal from '@/components/StakeModal.vue';
 import { returnPercentage, returnAmounts } from '@/utility/functions'
 import { useValidatorsStore, Validators } from '@/stores/validators';
 import { BigNumber } from 'ethers'
-import { useRouter } from 'vue-router';
+import { useWalletStore } from '@/stores/wallet'
+import { ref } from 'vue'
 
 const { direction, order, getPagination, pageIndex, getAmountOfPages, getLoading, showElected, showNonElected, validators } = storeToRefs(useValidatorsStore())
 const SORT_FIELD = {
@@ -19,7 +21,8 @@ const SORT_FIELD = {
     RATE: 'rate',
     UPTIME: 'uptime_percentage'
 }
-const router = useRouter()
+const isOpenStake = ref(false)
+const stakeValidator = ref(null)
 const validatorsStore = useValidatorsStore()
 function amountOfElected(validators: Validators[]) {
     return validators.filter((validator) => validator.active === true).length
@@ -27,13 +30,22 @@ function amountOfElected(validators: Validators[]) {
 function amountOfNonElected(validators: Validators[]) {
     return validators.filter((validator) => validator.active === false).length
 }
-function redirectDetail(validator: string) {
-    router.push(`/validators/${validator}`)
+function activateStake(validator: any) {
+    stakeValidator.value = validator
+    isOpenStake.value = true
+}
+function stakedSuccess() {
+    const walletStore = useWalletStore()
+    walletStore.loadDelegations()
+    walletStore.loadOneBalance()
+    isOpenStake.value = false
 }
 </script>
 
 <template>
     <div class="flex flex-col flex-1 space-y-4">
+        <StakeModal v-if="stakeValidator" @success-stake="stakedSuccess()" :validator="stakeValidator"
+            :modalOpen="isOpenStake" @close-modal="isOpenStake = false; stakeValidator = null" />
         <div class="flex flex-none">
             <ValidatorGuide />
         </div>
@@ -149,9 +161,8 @@ function redirectDetail(validator: string) {
                             </tr>
 
                             <tr v-else
-                                class="border-b from-slightGray dark:from-oswapDark-gray dark:to-slightDark bg-gradient-to-r dark:border-gray-700 font-semibold text-center cursor-pointer"
-                                @click="redirectDetail(validator.address)" v-for="(validator, index) in getPagination"
-                                :key="validator.address">
+                                class="border-b from-slightGray dark:from-oswapDark-gray dark:to-slightDark bg-gradient-to-r dark:border-gray-700 font-semibold text-center"
+                                v-for="(validator, index) in getPagination" :key="validator.address">
                                 <td class="lg:py-4 lg:px-6 md:py-4 md:px-6 py-2 px-2 text-xs md:text-sm lg:text-sm">
                                     <div class="flex flex-none items-center justify-center md:justify-center space-x-0">
                                         <StateTag :state="validator.active" />
@@ -164,7 +175,12 @@ function redirectDetail(validator: string) {
                                             <ValidatorLogo logoClass="rounded-full p-1 w-12 h-12 " :pixeles="48"
                                                 :address="validator.address" :has-logo="validator.hasLogo" />
                                         </div>
-                                        <p class="validatorName">{{ validator.name }}</p>
+                                        <router-link :to="`/validators/${validator.address}`"
+                                            class="validatorName text-left">{{
+                                                    validator.name
+                                            }}</router-link>
+                                        <i @click="activateStake(validator)"
+                                            class="las la-coins cursor-pointer text-2xl"></i>
                                     </div>
                                 </td>
                                 <td :class="parseFloat(validator.apr) > 0.14 ? 'text-red-400 ' : ' text-gray-500 dark:text-gray-300'"

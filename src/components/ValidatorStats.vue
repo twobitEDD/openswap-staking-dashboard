@@ -116,7 +116,7 @@ function stakedSuccess() {
                                     <div class="flex flex-none space-x-2"
                                         v-for="undel of props.Args.delegated.Undelegations">
                                         <span>
-                                            - {{ numeral(delegatedAmount).format('0[.]0000')
+                                            - {{ numeral(undel.Amount / (10 ** 18)).format('0[.]0000')
                                             }}
                                             ONEs
                                         </span>

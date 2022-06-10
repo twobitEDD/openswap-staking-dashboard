@@ -6,7 +6,7 @@ import EpochGuide from '@/components/EpochGuide.vue'
 import Footer from '@/components/Footer.vue'
 import Header from '@/components/Header.vue'
 import { useWalletStore } from './stores/wallet';
-const { theme } = storeToRefs(useGlobalStore())
+const { theme, effects } = storeToRefs(useGlobalStore())
 const globalStore = useGlobalStore();
 
 globalStore.loadNetworkInfo()
@@ -82,7 +82,12 @@ function endListener() {
           </div>
         </div>
         <div class="flex flex-1 lg:py-20 mx-3 lg:mx-0 mt-14 lg:mt-0 min-h-full">
-          <router-view />
+          <router-view v-slot="{ Component }">
+            <transition :enter-active-class="effects ? 'animate__animated animate__fadeIn' : ''"
+              :leave-active-class="effects ? 'animate__animated animate__fadeOut' : ''" mode="out-in">
+              <component :is="Component" />
+            </transition>
+          </router-view>
         </div>
         <div class="flex flex-none w-full max-w-screen-xl mx-auto">
           <Footer />

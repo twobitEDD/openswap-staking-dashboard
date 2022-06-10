@@ -9,8 +9,8 @@ import { cachePolicy } from '@/constants';
 import { useWalletStore } from './wallet';
 
 interface globalStore {
+    effects: boolean;
     theme: string;
-    isFirst: boolean;
     scroll: number;
     epoch: number;
     nextEpoch: number;
@@ -27,8 +27,8 @@ interface globalStore {
 
 export const useGlobalStore = defineStore('global', {
     state: () => ({
+        effects: true,
         theme: 'light',
-        isFirst: true,
         scroll: 0,
         epoch: 0,
         nextEpoch: 0,
@@ -71,8 +71,8 @@ export const useGlobalStore = defineStore('global', {
         setScroll(scrollPosition: number) {
             this.scroll = scrollPosition
         },
-        changeIsFirst() {
-            this.isFirst = false
+        changeEffects() {
+            this.effects = !this.effects
         },
         scrollTop() {
             // This triggers a listener to this type of action

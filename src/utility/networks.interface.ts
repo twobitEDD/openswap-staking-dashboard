@@ -6,4 +6,6 @@ export interface Networks {
     name: string;
     hasPrice: boolean;
     delegatorAddress: string;
+    delegatorContract: string;
+    settingsContract: string;
 }

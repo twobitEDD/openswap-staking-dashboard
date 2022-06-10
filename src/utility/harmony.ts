@@ -14,7 +14,9 @@ export const availableNetworks: Networks[] = [
         explorer: 'https://explorer.harmony.one/',
         name: 'Harmony Mainnet',
         hasPrice: true,
-        delegatorAddress: '0x00000000000000000000000000000000000000fc'
+        delegatorAddress: '0x00000000000000000000000000000000000000fc',
+        delegatorContract: '0xe6Dd98403eC2661A4BB1FB73b64e7Df9bd9B1045',
+        settingsContract: '0x535E8e910F78BD12BD0140aBe740FD1b2069A90c'
     },
     {
         chainId: 1666700000,
@@ -23,7 +25,9 @@ export const availableNetworks: Networks[] = [
         explorer: 'https://explorer.pops.one/',
         name: 'Harmony Testnet',
         hasPrice: true,
-        delegatorAddress: '0x00000000000000000000000000000000000000fc'
+        delegatorAddress: '0x00000000000000000000000000000000000000fc',
+        delegatorContract: '',
+        settingsContract: ''
     }
 ]
 
