@@ -9,7 +9,7 @@ import numeral from 'numeral';
 import { ReturnHistory, StakeHistory } from '@/utility/history.interface';
 export interface Validators {
     active: boolean;
-    apr: string;
+    apr: number;
     address: string;
     name: string;
     rate: string;
@@ -56,6 +56,16 @@ export const useValidatorsStore = defineStore('validators', {
         },
         getValidatorPagination(): Delegation[] {
             return this.validator.delegations.slice(this.validatorPageIndex * this.limit, (this.validatorPageIndex + 1) * this.limit)
+        },
+        getValidatorsMediumApr(): number {
+            const totalApr = this.validators.reduce((previousValue, currentValue) => {
+                if (currentValue.active) {
+                    return currentValue.apr + previousValue
+                }
+                return previousValue
+            }, 0)
+            const mediumApr = totalApr / this.validators.filter((validator) => validator.active).length
+            return mediumApr
         },
         getFiltered(): Validators[] {
             return this.validators.filter((validator) => {
@@ -144,7 +154,7 @@ export const useValidatorsStore = defineStore('validators', {
                     }).map((validator) => {
                         return {
                             ...validator,
-                            apr: validator.apr || '0',
+                            apr: validator.apr || 0,
                             rate: validator.rate,
                             uptime_percentage: validator.uptime_percentage,
                             total_stake: utils.formatUnits(validator.total_stake, 18)

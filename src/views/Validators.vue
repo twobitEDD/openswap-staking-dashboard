@@ -2,6 +2,7 @@
 import { useValidatorsStore } from '@/stores/validators';
 import ValidatorsTable from '@/components/ValidatorsTable.vue'
 import Profile from '@/components/Profile.vue'
+import MediumAPR from '@/components/MediumAPR.vue'
 import { useGlobalStore } from '@/stores/global';
 
 const validatorsStore = useValidatorsStore()
@@ -30,6 +31,9 @@ globalStore.$onAction(
         <div class="flex flex-col flex-1 space-y-4 mt-4">
             <div class="flex flex-1">
                 <Profile :showDetailButton="true" />
+            </div>
+            <div class="flex flex-1 justify-center">
+                <MediumAPR />
             </div>
             <div class="flex flex-none">
                 <ValidatorsTable />

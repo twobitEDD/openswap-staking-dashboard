@@ -23,6 +23,8 @@ interface globalStore {
     onePrice: string;
     autoConnect: boolean;
     walletMode: 'metamask' | 'walletconnect';
+    profileDetails: boolean;
+    notes: boolean;
 }
 
 export const useGlobalStore = defineStore('global', {
@@ -40,7 +42,9 @@ export const useGlobalStore = defineStore('global', {
         networkId: 1666600000,
         onePrice: '0',
         autoConnect: false,
-        walletMode: 'metamask'
+        walletMode: 'metamask',
+        profileDetails: false,
+        notes: true
     } as globalStore),
     persist: true,
     getters: {
@@ -85,6 +89,12 @@ export const useGlobalStore = defineStore('global', {
             };
             const walletStore = useWalletStore()
             walletStore.disconnect()
+        },
+        changeProfileDetails() {
+            this.profileDetails = !this.profileDetails
+        },
+        changeNotes() {
+            this.notes = !this.notes
         },
         changeTheme() {
             if (this.theme == 'dark') {

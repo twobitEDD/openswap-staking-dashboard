@@ -183,7 +183,7 @@ function stakedSuccess() {
                                             class="las la-coins cursor-pointer text-2xl"></i>
                                     </div>
                                 </td>
-                                <td :class="parseFloat(validator.apr) > 0.14 ? 'text-red-400 ' : ' text-gray-500 dark:text-gray-300'"
+                                <td :class="validator.apr > 0.14 ? 'text-red-400 ' : ' text-gray-500 dark:text-gray-300'"
                                     class="lg:py-4 lg:px-6 md:py-4 md:px-6 py-2 px-1 text-xs md:text-sm lg:text-sm whitespace-nowrap hidden md:table-cell">
                                     {{ returnPercentage(validator.apr) }}</td>
                                 <td :class="BigNumber.from(validator.total_stake.toString().split('.')[0]).gt(BigNumber.from(5000000)) ? ' text-gray-500 dark:text-gray-300' : ' text-red-400'"

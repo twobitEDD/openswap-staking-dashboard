@@ -45,8 +45,8 @@ function randomColorIndex() {
         </div>
         <div class="flex flex-none  flex-wrap justify-center items-center">
             <template v-for="section of sections">
-                <div class="flex flex-none space-x-1 m-1">
-                    <div :style="`background-color:${section.color}`" class="w-6 h-6"></div>
+                <div class="flex flex-none space-x-2 m-1">
+                    <div :style="`background-color:${section.color}`" class="w-6 h-6 rounded-lg"></div>
                     <span>
                         <router-link :to="`/validators/${section.address}`">{{ section.label }}</router-link>
                         ({{ numeral(section.value / 100).format('%0') }})
