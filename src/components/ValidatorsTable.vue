@@ -49,8 +49,8 @@ function stakedSuccess() {
         <div class="flex flex-none">
             <ValidatorGuide />
         </div>
-        <div class="flex flex-1 justify-between">
-            <div class="flex flex-none space-x-4">
+        <div class="flex flex-1 justify-between lg:flex-row flex-col space-y-4 lg:space-y-0">
+            <div class="flex flex-none lg:flex-row flex-col space-y-4 lg:space-y-0 lg:space-x-4">
                 <button
                     :class="showElected ? 'shadow-light-depth dark:shadow-dark-depth dark:text-oswapBlue-light' : 'shadow-light-level dark:shadow-dark-level dark:text-gray-400'"
                     class="px-3 py-2 rounded-lg text-sm" @click="validatorsStore.setShowElected(!showElected)">Show
