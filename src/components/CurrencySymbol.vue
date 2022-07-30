@@ -10,8 +10,10 @@ const symbol = computed(() => {
             return '€'
         case 'usd':
             return '$'
-        case '~sats':
-            return 'sats '
+        case 'btc':
+            return '₿ '
+        case 'sats':
+            return '~sats '
     }
 })
 </script>

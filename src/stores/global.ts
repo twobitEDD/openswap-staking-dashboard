@@ -12,7 +12,8 @@ import dayjs from 'dayjs'
 interface prices {
     eur: number;
     sats: number;
-    usd: number
+    usd: number;
+    btc: number;
 }
 interface globalStore {
     effects: boolean;
@@ -26,7 +27,7 @@ interface globalStore {
     slots: number;
     amountBlocks: number;
     networkId: number;
-    currencyDisplay: 'usd' | 'eur' | 'sats';
+    currencyDisplay: 'usd' | 'eur' | 'sats' | 'btc';
     onePrice: prices;
     timeLastPrice: any;
     autoConnect: boolean;

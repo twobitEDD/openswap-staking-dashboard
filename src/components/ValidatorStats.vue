@@ -161,7 +161,7 @@ function stakedSuccess() {
                         <span v-if="onePrice[currencyDisplay] !== 0">
                             /
                             <CurrencySymbol />{{
-                                    numeral(projected * onePrice[currencyDisplay]).format('0[.]00')
+                                    numeral(projected * onePrice[currencyDisplay]).format('0[.]0000')
                             }}
                         </span>
                     </span>
@@ -170,7 +170,7 @@ function stakedSuccess() {
                         <span v-if="onePrice[currencyDisplay] !== 0">
                             /
                             <CurrencySymbol />{{
-                                    numeral(projected * 7 * onePrice[currencyDisplay]).format('0[.]00')
+                                    numeral(projected * 7 * onePrice[currencyDisplay]).format('0[.]0000')
                             }}
                         </span>
                     </span>
@@ -179,7 +179,7 @@ function stakedSuccess() {
                         <span v-if="onePrice[currencyDisplay] !== 0">
                             /
                             <CurrencySymbol />{{
-                                    numeral(projected * 7 * 4 * onePrice[currencyDisplay]).format('0[.]00')
+                                    numeral(projected * 7 * 4 * onePrice[currencyDisplay]).format('0[.]0000')
                             }}
                         </span>
                     </span>
@@ -188,7 +188,7 @@ function stakedSuccess() {
                         <span v-if="onePrice[currencyDisplay] !== 0">
                             /
                             <CurrencySymbol />{{
-                                    numeral(projected * 7 * 4 * 12 * onePrice[currencyDisplay]).format('0[.]00')
+                                    numeral(projected * 7 * 4 * 12 * onePrice[currencyDisplay]).format('0[.]0000')
                             }}
                         </span>
                     </span>
