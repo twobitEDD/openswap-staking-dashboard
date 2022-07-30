@@ -7,9 +7,9 @@ const { currencyDisplay } = storeToRefs(useGlobalStore())
 const symbol = computed(() => {
     switch (currencyDisplay.value) {
         case 'eur':
-            return '€ '
+            return '€'
         case 'usd':
-            return '$ '
+            return '$'
         case 'sats':
             return 'sats '
     }
