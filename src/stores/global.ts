@@ -7,7 +7,13 @@ import { ETH_PRICE } from '@/apollo/queries';
 import { client } from '@/apollo/clients';
 import { cachePolicy } from '@/constants';
 import { useWalletStore } from './wallet';
-
+import { getPrices } from '@/utility/coingecko';
+import dayjs from 'dayjs'
+interface prices {
+    eur: number;
+    sats: number;
+    usd: number
+}
 interface globalStore {
     effects: boolean;
     theme: string;
@@ -20,7 +26,9 @@ interface globalStore {
     slots: number;
     amountBlocks: number;
     networkId: number;
-    onePrice: string;
+    currencyDisplay: 'usd' | 'eur' | 'sats';
+    onePrice: prices;
+    timeLastPrice: any;
     autoConnect: boolean;
     walletMode: 'metamask' | 'walletconnect';
     profileDetails: boolean;
@@ -40,7 +48,9 @@ export const useGlobalStore = defineStore('global', {
         slots: 0,
         amountBlocks: 0,
         networkId: 1666600000,
-        onePrice: '0',
+        currencyDisplay: 'usd',
+        onePrice: {} as prices,
+        timeLastPrice: dayjs(),
         autoConnect: false,
         walletMode: 'metamask',
         profileDetails: false,
@@ -104,20 +114,26 @@ export const useGlobalStore = defineStore('global', {
             };
         },
         async setPrices() {
-            this.onePrice = '0'
-            try {
-                if (harmony.getHarmonyNetwork(this.networkId)?.hasPrice) {
-                    let result = await client.query({
-                        query: ETH_PRICE(null),
-                        fetchPolicy: cachePolicy,
-                    })
-                    const currentPrice = result?.data?.bundles[0]?.ethPrice
-                    this.onePrice = currentPrice
+            if (dayjs(this.timeLastPrice).diff(dayjs(), 'minutes') > 5 || !this.onePrice.usd) {
+                const price = await getPrices()
+                if (price.status == 200) {
+                    this.onePrice = price.data.harmony
                 }
-            } catch (e) {
-                console.log(e)
-
             }
+            // this.onePrice = '0'
+            // try {
+            //     if (harmony.getHarmonyNetwork(this.networkId)?.hasPrice) {
+            //         let result = await client.query({
+            //             query: ETH_PRICE(null),
+            //             fetchPolicy: cachePolicy,
+            //         })
+            //         const currentPrice = result?.data?.bundles[0]?.ethPrice
+            //         this.onePrice = currentPrice
+            //     }
+            // } catch (e) {
+            //     console.log(e)
+
+            // }
             return true
         },
         changeChainId(newChainId: number) {

@@ -7,7 +7,7 @@ import Popper from "vue3-popper";
 import { useGlobalStore } from '@/stores/global';
 import { storeToRefs } from 'pinia';
 import { useWalletStore } from '@/stores/wallet';
-const { effectiveStake, supply, totalStaked, slots, amountBlocks, onePrice } = storeToRefs(useGlobalStore())
+const { effectiveStake, supply, totalStaked, slots, amountBlocks, onePrice, currencyDisplay } = storeToRefs(useGlobalStore())
 const { isSigned } = storeToRefs(useWalletStore())
 const routes = [
     {
@@ -56,9 +56,9 @@ if (globalStore.autoConnect) {
                     </div>
                     <template #content>
                         <div class="flex flex-none flex-col px-2 text-sm space-y-1">
-                            <div class="flex flex-none space-x-1" v-if="onePrice !== '0'">
+                            <div class="flex flex-none space-x-1" v-if="onePrice[currencyDisplay] !== 0">
                                 <span>Token Price:</span>
-                                <span>{{ numeral(onePrice).format('0[.]00') }}</span>
+                                <span>{{ numeral(onePrice[currencyDisplay]).format('0[.]00') }}</span>
                             </div>
                             <div class="flex flex-none space-x-1">
                                 <span>Total Supply:</span>

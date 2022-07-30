@@ -8,6 +8,7 @@ import 'vue-css-donut-chart/dist/vcdonut.css';
 import '@/assets/tailwind.postcss'
 import Toast, { PluginOptions } from "vue-toastification";
 import 'animate.css';
+import dayjs from 'dayjs'
 // Import the CSS or use your own!
 import "@/assets/toast.scss";
 const options: PluginOptions = {
@@ -19,6 +20,7 @@ const options: PluginOptions = {
 const app = createApp(App)
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
+app.config.globalProperties.$dayjs = dayjs
 app.use(Toast, options);
 app.use(Donut);
 app.use(pinia).use(router).mount('#app')

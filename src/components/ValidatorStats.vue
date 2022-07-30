@@ -4,8 +4,8 @@ import ValidatorLogo from '@/components/ValidatorLogo.vue';
 import UnstakeModal from '@/components/UnstakeModal.vue';
 import StakeModal from '@/components/StakeModal.vue';
 import { Delegation } from '@/utility/delegations.interface';
+import CurrencySymbol from '@/components/CurrencySymbol.vue';
 import Popper from "vue3-popper";
-import { utils } from 'ethers';
 import numeral from 'numeral';
 import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
@@ -17,7 +17,7 @@ interface Props {
 const showProjected = ref(false)
 const isOpenUnstake = ref(false)
 const isOpenStake = ref(false)
-const { epoch, onePrice } = storeToRefs(useGlobalStore())
+const { epoch, onePrice, currencyDisplay } = storeToRefs(useGlobalStore())
 const props = withDefaults(defineProps<Props>(), {});
 
 function getUndelegationEpoch(undelEpoch: number) {
@@ -86,10 +86,11 @@ function stakedSuccess() {
                         Staked: {{
                                 numeral(delegatedAmount).format('0[.]0000')
                         }}
-                        <span v-if="onePrice !== '0'">
-                            / {{
+                        <span v-if="onePrice[currencyDisplay] !== 0">
+                            /
+                            <CurrencySymbol />{{
                                     numeral((delegatedAmount) *
-                                        parseFloat(onePrice)).format('$0[.]0000')
+                                        onePrice[currencyDisplay]).format('0[.]0000')
                             }}
                         </span>
                     </span>
@@ -98,9 +99,11 @@ function stakedSuccess() {
                             Undelegated: {{
                                     getAmountsUndelegated
                             }}
-                            <span v-if="onePrice !== '0'">
-                                / {{
-                                        numeral(parseFloat(getAmountsUndelegated) * parseFloat(onePrice)).format('$0[.]0000')
+                            <span v-if="onePrice[currencyDisplay] !== 0">
+                                /
+                                <CurrencySymbol />{{
+                                        numeral(parseFloat(getAmountsUndelegated) *
+                                            onePrice[currencyDisplay]).format('0[.]0000')
                                 }}
                             </span>
                         </span>
@@ -134,10 +137,11 @@ function stakedSuccess() {
                         Rewards: {{
                                 numeral(rewardsAmount).format('0[.]0000')
                         }}
-                        <span v-if="onePrice !== '0'">
-                            / {{
+                        <span v-if="onePrice[currencyDisplay] !== 0">
+                            /
+                            <CurrencySymbol />{{
                                     numeral((rewardsAmount) *
-                                        parseFloat(onePrice)).format('$0[.]0000')
+                                        onePrice[currencyDisplay]).format('0[.]0000')
                             }}
                         </span>
                     </span>
@@ -154,33 +158,37 @@ function stakedSuccess() {
                 <div class="flex flex-col space-y-2">
                     <span>
                         Daily: {{ numeral(projected).format('0[.]00') }}
-                        <span v-if="onePrice !== '0'">
-                            / {{
-                                    numeral(projected * parseFloat(onePrice)).format('$0[.]00')
+                        <span v-if="onePrice[currencyDisplay] !== 0">
+                            /
+                            <CurrencySymbol />{{
+                                    numeral(projected * onePrice[currencyDisplay]).format('0[.]00')
                             }}
                         </span>
                     </span>
                     <span>
                         Weekly: {{ numeral(projected * 7).format('0[.]00') }}
-                        <span v-if="onePrice !== '0'">
-                            / {{
-                                    numeral(projected * 7 * parseFloat(onePrice)).format('$0[.]00')
+                        <span v-if="onePrice[currencyDisplay] !== 0">
+                            /
+                            <CurrencySymbol />{{
+                                    numeral(projected * 7 * onePrice[currencyDisplay]).format('0[.]00')
                             }}
                         </span>
                     </span>
                     <span>
                         Monthly: {{ numeral(projected * 7 * 4).format('0[.]00') }}
-                        <span v-if="onePrice !== '0'">
-                            / {{
-                                    numeral(projected * 7 * 4 * parseFloat(onePrice)).format('$0[.]00')
+                        <span v-if="onePrice[currencyDisplay] !== 0">
+                            /
+                            <CurrencySymbol />{{
+                                    numeral(projected * 7 * 4 * onePrice[currencyDisplay]).format('0[.]00')
                             }}
                         </span>
                     </span>
                     <span>
                         Yearly: {{ numeral(projected * 7 * 4 * 12).format('0[.]00') }}
-                        <span v-if="onePrice !== '0'">
-                            / {{
-                                    numeral(projected * 7 * 4 * 12 * parseFloat(onePrice)).format('$0[.]00')
+                        <span v-if="onePrice[currencyDisplay] !== 0">
+                            /
+                            <CurrencySymbol />{{
+                                    numeral(projected * 7 * 4 * 12 * onePrice[currencyDisplay]).format('0[.]00')
                             }}
                         </span>
                     </span>

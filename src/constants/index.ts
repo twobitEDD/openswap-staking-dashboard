@@ -1,7 +1,7 @@
 
 export const BASE_TITTLE = `OpenSwap's Validators Terminal `
 export const BASE_URL = 'https://api.stake.hmny.io/networks/'
-
+export const CG_URL = 'https://api.coingecko.com/api/v3/'
 export const validatorsWhitelist = [
     'one1j35d0vd4uzwffeawjjfukn8t9wjt8csungj0z0'
 ]

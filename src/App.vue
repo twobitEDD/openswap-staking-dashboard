@@ -6,6 +6,7 @@ import EpochGuide from '@/components/EpochGuide.vue'
 import Footer from '@/components/Footer.vue'
 import Header from '@/components/Header.vue'
 import { useWalletStore } from './stores/wallet';
+import CurrencySelector from './components/CurrencySelector.vue';
 const { theme, effects } = storeToRefs(useGlobalStore())
 const globalStore = useGlobalStore();
 
@@ -95,10 +96,8 @@ function endListener() {
       </div>
     </div>
 
-    <div class="fixed flex flex-col justify-end space-y-2 bottom-5 right-2">
-      <button class="flex flex-none justify-end" v-if="globalStore.getScrollPosition" @click="globalStore.scrollTop()">
-        <i class="las la-chevron-circle-up text-oswapGreen-light text-4xl"></i>
-      </button>
+    <div class="fixed flex flex-col justify-end space-y-2 bottom-5 right-1">
+      <CurrencySelector />
       <EpochGuide />
     </div>
   </div>

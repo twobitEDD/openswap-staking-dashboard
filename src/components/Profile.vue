@@ -8,6 +8,7 @@ import {
 import ValidatorLogo from '@/components/ValidatorLogo.vue'
 import MiniLoader from '@/components/MiniLoader.vue'
 import UnstakeModal from '@/components/UnstakeModal.vue'
+import CurrencySymbol from '@/components/CurrencySymbol.vue';
 import { storeToRefs } from 'pinia';
 import numeral from 'numeral'
 import Address from '@/components/Address.vue'
@@ -17,7 +18,7 @@ import { ref } from 'vue';
 const walletStore = useWalletStore()
 const globalStore = useGlobalStore()
 const { availableBalance, userAddress, getTotalStaked, getTotalRewards, getPendingUndelegated } = storeToRefs(useWalletStore())
-const { onePrice, profileDetails } = storeToRefs(useGlobalStore())
+const { onePrice, profileDetails, currencyDisplay } = storeToRefs(useGlobalStore())
 let isOpen = ref(false)
 let isClaiming = ref(false)
 interface Profile {
@@ -52,10 +53,11 @@ async function claim() {
                     <div class="flex flex-1 font-medium text-lg justify-center ">
                         <p class="text-oswapBlue mx-2">{{ numeral(getTotalStaked).format('0[.]00')
                         }}
-                            <template v-if="onePrice !== '0'">
-                                ({{
+                            <template v-if="onePrice[currencyDisplay] !== 0">
+                                (
+                                <CurrencySymbol />{{
                                         numeral(parseFloat(getTotalStaked) *
-                                            parseFloat(onePrice)).format('$0[.]00')
+                                            onePrice[currencyDisplay]).format('0[.]00')
                                 }})
                             </template>
                         </p>
@@ -97,10 +99,12 @@ async function claim() {
                                             class="flex flex-none flex-col items-center justify-center text-oswapBlue-dark font-medium">
                                             <span class="text-xs dark:text-white text-black">Staked</span>
                                             <span class="pt-1">{{ numeral(getTotalStaked).format('0[.]00') }}</span>
-                                            <span v-if="onePrice !== '0'">{{
-                                                    numeral(parseFloat(getTotalStaked) *
-                                                        parseFloat(onePrice)).format('$0[.]00')
-                                            }}</span>
+                                            <span v-if="onePrice[currencyDisplay] !== 0">
+                                                <CurrencySymbol />{{
+                                                        numeral(parseFloat(getTotalStaked) *
+                                                            onePrice[currencyDisplay]).format('0[.]00')
+                                                }}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -116,10 +120,12 @@ async function claim() {
                                             <span class="text-xs dark:text-white text-black">Undelegated</span>
                                             <span class="pt-1">{{ numeral(getPendingUndelegated).format('0[.]00')
                                             }}</span>
-                                            <span v-if="onePrice !== '0'">{{
-                                                    numeral(parseFloat(getPendingUndelegated) *
-                                                        parseFloat(onePrice)).format('$0[.]00')
-                                            }}</span>
+                                            <span v-if="onePrice[currencyDisplay] !== 0">
+                                                <CurrencySymbol />{{
+                                                        numeral(parseFloat(getPendingUndelegated) *
+                                                            onePrice[currencyDisplay]).format('0[.]00')
+                                                }}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -134,10 +140,12 @@ async function claim() {
                                             class="flex flex-none flex-col items-center justify-center text-oswapGreen-dark font-medium">
                                             <span class="text-xs dark:text-white text-black">Rewards</span>
                                             <span class="pt-1">{{ numeral(getTotalRewards).format('0[.]00') }}</span>
-                                            <span v-if="onePrice !== '0'">{{
-                                                    numeral(parseFloat(getTotalRewards) *
-                                                        parseFloat(onePrice)).format('$0[.]00')
-                                            }}</span>
+                                            <span v-if="onePrice[currencyDisplay] !== 0">
+                                                <CurrencySymbol />{{
+                                                        numeral(parseFloat(getTotalRewards) *
+                                                            onePrice[currencyDisplay]).format('0[.]00')
+                                                }}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -151,10 +159,12 @@ async function claim() {
                                             class="flex flex-none flex-col items-center justify-center text-oswapGreen-light font-medium">
                                             <span class="text-xs dark:text-white text-black">Available</span>
                                             <span class="pt-1">{{ numeral(availableBalance).format('0[.]00') }}</span>
-                                            <span v-if="onePrice !== '0'">{{
-                                                    numeral(parseFloat(availableBalance) *
-                                                        parseFloat(onePrice)).format('$0[.]00')
-                                            }}</span>
+                                            <span v-if="onePrice[currencyDisplay] !== 0">
+                                                <CurrencySymbol />{{
+                                                        numeral(parseFloat(availableBalance) *
+                                                            onePrice[currencyDisplay]).format('0[.]00')
+                                                }}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
