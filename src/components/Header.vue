@@ -52,7 +52,7 @@ if (globalStore.autoConnect) {
             <div class="flex flex-none">
                 <Popper hover>
                     <div class="flex flex-none p-1 shadow-light-level dark:shadow-dark-level rounded-full">
-                        <img class="w-6 h-6" :src="HarmonyLogo" />
+                        <img class="w-10 h-10" :src="HarmonyLogo" />
                     </div>
                     <template #content>
                         <div class="flex flex-none flex-col px-2 text-sm space-y-1">

@@ -45,7 +45,7 @@
     <div
       class="flex flex-1 justify-center items-center lg:order-2 order-1"
     >
-      <img class="h-48 w-full lg:h-64" :src="OneLogo" />
+      <img class="h-96 w-full lg:h-full" :src="OneLogo" />
     </div>
   </div>
 </template>
