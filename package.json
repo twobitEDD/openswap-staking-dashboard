@@ -2,7 +2,7 @@
   "name": "openswap-validator-terminal",
   "version": "1.0.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "start": "vite preview --host",
     "build": "vite build",
     "build-host": "vite build --host",
